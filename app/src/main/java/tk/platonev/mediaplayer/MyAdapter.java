@@ -1,8 +1,10 @@
 package tk.platonev.mediaplayer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,7 +20,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     List<MediaFileInfo> mVideos = new ArrayList<>();
 
+    Context mContext;
+
     public MyAdapter(Context context) {
+
+        mContext = context;
         String[] proj = {MediaStore.Video.Media._ID,
                 MediaStore.Video.Media.DATA,
                 MediaStore.Video.Media.DISPLAY_NAME,
@@ -70,7 +76,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        holder.getVideoName().setText(mVideos.get(position).getFileName());
+        holder.getVideoName().setText(mVideos.get(position).getFilePath());
         holder.getVideoDuration().setText(mVideos.get(position).getDuration());
     }
 
@@ -92,6 +98,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public ViewHolder(View itemView) {
             super(itemView);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, PlayerActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("file", getVideoName().getText().toString());
+                    intent.putExtras(bundle);
+                    mContext.startActivity(intent);
+                }
+            });
             videoName = (TextView) itemView.findViewById(R.id.videoName);
             videoDuration = (TextView) itemView.findViewById(R.id.videoDuration);
         }
