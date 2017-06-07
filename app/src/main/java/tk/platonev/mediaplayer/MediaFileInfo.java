@@ -23,7 +23,7 @@ public class MediaFileInfo {
             sb.append(d / 60 + "m");
             d = d % 60;
         }
-        sb.append(d);
+        sb.append(d + "s");
 
         this.duration = sb.toString();
     }
